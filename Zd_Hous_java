@@ -1,0 +1,48 @@
+interface Cabinet {
+	// zwraca dowolny element o podanej nazwie
+	Optional<Folder> findFolderByName(String name);
+
+	// zwraca wszystkie foldery podanego rozmiaru SMALL/MEDIUM/LARGE
+	List<Folder> findFoldersBySize(String size);                      // napewno nie trzeba to natywno wstawić 'SMALL/MEDIUM/LARGE' za pomocą typem 'enum'
+
+	// zwraca liczbę wszystkich obiektów tworzących strukturę
+	int count();
+}
+
+// realizacja interfejsu "Cabinet", tu powinna się zachowywać metody realizacji / o dodaniu konstruktora nic nie było :)
+public class FileCabinet implements Cabinet {
+	private List<Folder> folders;
+	
+	// konstruktor
+	public FileCabinet(List<Folder> folders) {
+        this.folders = folders;
+    }
+	
+	@Override // -> wyraźnege wskazanie metody 
+    public Optional<Folder> findFolderByName(String name) {
+        return folders.stream()
+                      .filter(folder -> folder.getName().equals(name))
+                      .findFirst();
+    }
+
+    @Override // -> wyraźnege wskazanie metody 
+    public List<Folder> findFoldersBySize(Size size) {
+        return folders.stream()
+                      .filter(folder -> folder.getSize().equals(size.name()))
+                      .toList();
+    }
+
+    @Override // -> wyraźnege wskazanie metody 
+    public int count() {
+        return folders.size();
+    }
+}
+
+interface Folder {
+	String getName();
+	String getSize();
+}
+
+interface MultiFolder extends Folder {
+	List<Folder> getFolders();
+}
